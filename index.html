@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutiVerse - Atividades Adaptadas para TEA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://js.puter.com/v2/"></script>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.0/index.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/lexend@5.0.0/index.css" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: 'Lexend', 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #fef9f3 0%, #f0f4ff 50%, #f3f0ff 100%);
+  color: #2d3748;
+  margin: 0;
+  min-height: 100vh;
+}
+.bg-shapes {
+  position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+}
+.bg-shapes::before, .bg-shapes::after {
+  content: ''; position: absolute; border-radius: 50%;
+  filter: blur(60px); opacity: 0.3;
+}
+.bg-shapes::before {
+  width: 400px; height: 400px; background: #ffd6a5;
+  top: -100px; left: -100px;
+}
+.bg-shapes::after {
+  width: 500px; height: 500px; background: #caffbf;
+  bottom: -150px; right: -150px;
+}
+.card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 2px solid transparent;
+  transition: all .3s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.btn-primary {
+  background: linear-gradient(135deg, #7c5cff, #22d3ee);
+  color: white; border: none; cursor: pointer;
+  padding: 14px 28px; border-radius: 16px;
+  font-weight: 600; font-size: 16px;
+  transition: all .2s; font-family: inherit;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124,92,255,0.3); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-soft {
+  background: white;
+  border: 2px solid #e2e8f0;
+  color: #4a5568; cursor: pointer;
+  padding: 14px 28px; border-radius: 16px;
+  font-weight: 600; font-size: 16px;
+  transition: all .2s; font-family: inherit;
+}
+.btn-soft:hover { border-color: #7c5cff; background: #f7f5ff; }
+.btn-big {
+  padding: 24px; font-size: 18px; border-radius: 20px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; text-align: center;
+}
+.btn-emoji { font-size: 48px; }
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000; display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: white; border-radius: 24px;
+  padding: 32px; width: 100%; max-width: 600px;
+  max-height: 90vh; overflow-y: auto;
+}
+.input-field, .textarea-field, .select-field {
+  width: 100%; padding: 14px 18px;
+  background: #f7fafc; border: 2px solid #e2e8f0;
+  border-radius: 14px; color: #2d3748;
+  font-family: inherit; font-size: 16px; outline: none;
+  transition: all .2s;
+}
+.input-field:focus, .textarea-field:focus, .select-field:focus {
+  border-color: #7c5cff; background: white;
+}
+.textarea-field { resize: vertical; min-height: 180px; line-height: 1.6; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: white; border-radius: 16px;
+  padding: 16px 24px; z-index: 2000;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0; transition: all .3s;
+  font-weight: 500;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-left: 4px solid #48bb78; }
+.toast.error { border-left: 4px solid #f56565; }
+.toast.info { border-left: 4px solid #4299e1; }
+.loader {
+  width: 50px; height: 50px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #7c5cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.tab-btn {
+  padding: 12px 20px; border-radius: 14px;
+  font-weight: 600; font-size: 15px;
+  color: #718096; cursor: pointer;
+  border: 2px solid transparent;
+  background: white; transition: all .2s;
+  white-space: nowrap; font-family: inherit;
+  display: flex; align-items: center; gap: 8px;
+}
+.tab-btn:hover { color: #7c5cff; }
+.tab-btn.active {
+  color: #7c5cff; background: #f7f5ff;
+  border-color: #7c5cff;
+}
+.hidden { display: none !important; }
+.activity-card {
+  background: white; border-radius: 20px;
+  padding: 24px; cursor: pointer;
+  border: 3px solid transparent;
+  transition: all .3s; text-align: center;
+}
+.activity-card:hover {
+  transform: translateY(-4px);
+  border-color: #7c5cff;
+  box-shadow: 0 8px 24px rgba(124,92,255,0.15);
+}
+.activity-emoji { font-size: 56px; margin-bottom: 12px; }
+.comic-panel {
+  background: white; border: 3px solid #2d3748;
+  border-radius: 12px; padding: 16px;
+  position: relative; min-height: 200px;
+  display: flex; flex-direction: column;
+}
+.speech-bubble {
+  background: white; border: 2px solid #2d3748;
+  border-radius: 18px; padding: 10px 14px;
+  position: relative; margin: 8px 0;
+  font-size: 14px; line-height: 1.4;
+}
+.speech-bubble::after {
+  content: ''; position: absolute;
+  bottom: -10px; left: 20px;
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #2d3748;
+}
+.thought-bubble {
+  background: white; border: 2px solid #2d3748;
+  border-radius: 50%; padding: 12px 16px;
+  font-size: 13px; text-align: center;
+}
+.character {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin: 8px auto;
+  border: 3px solid #2d3748;
+}
+.quiz-option {
+  padding: 18px 24px; background: white;
+  border: 3px solid #e2e8f0; border-radius: 16px;
+  margin-bottom: 12px; cursor: pointer;
+  transition: all .2s; font-size: 17px;
+  display: flex; align-items: center; gap: 14px;
+  font-family: inherit; text-align: left;
+  width: 100%;
+}
+.quiz-option:hover:not(.disabled) {
+  border-color: #7c5cff; background: #f7f5ff;
+  transform: translateX(4px);
+}
+.quiz-option.correct {
+  background: #c6f6d5; border-color: #48bb78;
+  animation: correctPulse .5s;
+}
+.quiz-option.wrong {
+  background: #fed7d7; border-color: #f56565;
+}
+.quiz-option.disabled { cursor: default; opacity: 0.7; }
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+.match-card {
+  background: white; border: 3px solid #e2e8f0;
+  border-radius: 16px; padding: 20px;
+  cursor: pointer; transition: all .2s;
+  text-align: center; font-size: 40px;
+  min-height: 100px;
+  display: flex; align-items: center; justify-content: center;
+}
+.match-card:hover { border-color: #7c5cff; transform: scale(1.05); }
+.match-card.selected { border-color: #7c5cff; background: #f7f5ff; }
+.match-card.matched { border-color: #48bb78; background: #c6f6d5; cursor: default; }
+.progress-bar {
+  height: 12px; background: #e2e8f0;
+  border-radius: 999px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, #7c5cff, #22d3ee);
+  transition: width .5s; border-radius: 999px;
+}
+.reward-star {
+  display: inline-block;
+  animation: starPop .5s ease-out;
+}
+@keyframes starPop {
+  0% { transform: scale(0) rotate(0); }
+  50% { transform: scale(1.3) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+.level-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+}
+.level-1 { background: #c6f6d5; color: #22543d; }
+.level-2 { background: #feebc8; color: #744210; }
+.level-3 { background: #fed7d7; color: #742a2a; }
+.visual-timer {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(#7c5cff var(--progress, 100%), #e2e8f0 0%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.visual-timer::before {
+  content: ''; position: absolute;
+  width: 100px; height: 100px;
+  background: white; border-radius: 50%;
+}
+.visual-timer span {
+  position: relative; z-index: 1;
+  font-size: 24px; font-weight: 700;
+  color: #7c5cff;
+}
+.sequence-item {
+  background: white; border: 3px solid #e2e8f0;
+  border-radius: 14px; padding: 16px;
+  cursor: grab; transition: all .2s;
+  text-align: center; font-size: 36px;
+}
+.sequence-item:hover { border-color: #7c5cff; }
+.sequence-item.dragging { opacity: 0.5; }
+.social-story-panel {
+  background: white; border-radius: 20px;
+  padding: 24px; margin-bottom: 16px;
+  border-left: 6px solid #7c5cff;
+}
+.emotion-card {
+  background: white; border: 3px solid #e2e8f0;
+  border-radius: 16px; padding: 20px;
+  cursor: pointer; transition: all .2s;
+  text-align: center;
+}
+.emotion-card:hover { border-color: #7c5cff; transform: translateY(-4px); }
+.emotion-card.selected { border-color: #7c5cff; background: #f7f5ff; }
+.emotion-emoji { font-size: 64px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="bg-shapes"></div>
+
+<!-- HEADER -->
+<header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background: linear-gradient(135deg,#7c5cff,#22d3ee);">
+        🧩
+      </div>
+      <div>
+        <div class="font-bold text-xl">AutiVerse</div>
+        <div class="text-xs text-gray-500">Atividades adaptadas para TEA</div>
+      </div>
+    </div>
+    <div id="profileArea" class="flex items-center gap-3">
+      <span id="profileName" class="text-sm font-semibold text-gray-600 hidden sm:inline"></span>
+      <div id="profileAvatar" class="w-10 h-10 rounded-full flex items-center justify-center text-xl cursor-pointer bg-gradient-to-br from-purple-400 to-cyan-400" onclick="openProfileModal()">👤</div>
+    </div>
+  </div>
+</header>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="flex justify-between items-start mb-5">
+      <div>
+        <div class="text-2xl font-bold">👋 Olá! Vamos nos conhecer?</div>
+        <div class="text-sm text-gray-500 mt-1">Personalize sua experiência</div>
+      </div>
+      <button onclick="closeProfileModal()" class="text-2xl text-gray-400 hover:text-gray-600 w-8 h-8">×</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="text-sm font-semibold mb-2 block">Como você quer ser chamado?</label>
+        <input type="text" id="profileNameInput" class="input-field" placeholder="Seu nome">
+      </div>
+      <div>
+        <label class="text-sm font-semibold mb-2 block">Qual seu emoji favorito?</label>
+        <div class="grid grid-cols-6 gap-2" id="emojiPicker">
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🦖">🦖</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🚀">🚀</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🦄">🦄</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🐱">🐱</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🌈">🌈</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="⭐">⭐</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🎮">🎮</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🎨">🎨</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🐶">🐶</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🦋">🦋</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🌟">🌟</div>
+          <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🎵">🎵</div>
+        </div>
+      </div>
+      <div>
+        <label class="text-sm font-semibold mb-2 block">Nível de suporte</label>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="level-option p-3 rounded-xl border-2 border-gray-200 cursor-pointer text-center hover:border-purple-400" data-level="1">
+            <div class="text-2xl mb-1">🟢</div>
+            <div class="text-sm font-semibold">Nível 1</div>
+            <div class="text-xs text-gray-500">Mais independente</div>
+          </div>
+          <div class="level-option p-3 rounded-xl border-2 border-gray-200 cursor-pointer text-center hover:border-purple-400" data-level="2">
+            <div class="text-2xl mb-1">🟡</div>
+            <div class="text-sm font-semibold">Nível 2</div>
+            <div class="text-xs text-gray-500">Algum suporte</div>
+          </div>
+          <div class="level-option p-3 rounded-xl border-2 border-gray-200 cursor-pointer text-center hover:border-purple-400" data-level="3">
+            <div class="text-2xl mb-1">🔴</div>
+            <div class="text-sm font-semibold">Nível 3</div>
+            <div class="text-xs text-gray-500">Mais suporte</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="text-sm font-semibold mb-2 block">O que você gosta? (interesses especiais)</label>
+        <input type="text" id="interestsInput" class="input-field" placeholder="Ex: dinossauros, espaço, carros...">
+      </div>
+      <button class="btn-primary w-full py-4" onclick="saveProfile()">✨ Salvar e começar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEXT MODAL -->
+<div class="modal-overlay" id="textModal">
+  <div class="modal">
+    <div class="flex justify-between items-start mb-5">
+      <div>
+        <div class="text-2xl font-bold">📝 Colar texto</div>
+        <div class="text-sm text-gray-500 mt-1">Vamos transformar em atividades!</div>
+      </div>
+      <button onclick="closeTextModal()" class="text-2xl text-gray-400 hover:text-gray-600 w-8 h-8">×</button>
+    </div>
+    <div class="space-y-3">
+      <div>
+        <label class="text-sm font-semibold mb-2 block">Título (opcional)</label>
+        <input type="text" id="textTitle" class="input-field" placeholder="Ex: Meu texto sobre animais">
+      </div>
+      <div>
+        <label class="text-sm font-semibold mb-2 block">Texto</label>
+        <textarea id="textInput" class="textarea-field" placeholder="Cole o texto aqui..."></textarea>
+      </div>
+      <button class="btn-primary w-full py-4" onclick="processText()">✨ Transformar em atividades</button>
+      <button class="text-sm text-gray-500 hover:text-purple-600 w-full py-2" onclick="loadTextExample()">💡 Carregar exemplo</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastIcon" class="text-2xl">✓</span>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- HERO -->
+<section id="heroSection" class="max-w-7xl mx-auto px-6 pt-12 pb-8">
+  <div class="text-center mb-12">
+    <div class="inline-block text-6xl mb-4">🧩✨</div>
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
+      Aprender pode ser <span style="background: linear-gradient(90deg,#7c5cff,#22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent;">divertido!</span>
+    </h1>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+      Transforme qualquer texto em quadrinhos, testes e atividades visuais adaptadas para você.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
+    <button class="btn-soft btn-big" onclick="document.getElementById('fileInput').click()">
+      <div class="btn-emoji">📄</div>
+      <div class="font-semibold">Enviar PDF</div>
+    </button>
+    <button class="btn-soft btn-big" onclick="openTextModal()">
+      <div class="btn-emoji">📝</div>
+      <div class="font-semibold">Colar texto</div>
+    </button>
+    <button class="btn-soft btn-big" onclick="loadDemo()">
+      <div class="btn-emoji">🎮</div>
+      <div class="font-semibold">Experimentar</div>
+    </button>
+  </div>
+  <input type="file" id="fileInput" accept="application/pdf,.pdf" class="hidden">
+  <div id="fileInfo" class="hidden max-w-2xl mx-auto card p-4">
+    <div class="flex items-center gap-3">
+      <div class="text-4xl">📄</div>
+      <div class="flex-1 min-w-0">
+        <div id="fileName" class="font-semibold truncate"></div>
+        <div id="fileSize" class="text-sm text-gray-500"></div>
+      </div>
+      <button class="btn-soft text-sm px-3 py-2" onclick="resetFile()">✕</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSING -->
+<div id="processing" class="hidden max-w-3xl mx-auto px-6 py-10">
+  <div class="card p-10 text-center">
+    <div class="loader mx-auto mb-4"></div>
+    <div class="text-xl font-bold mb-2">✨ Criando suas atividades...</div>
+    <div id="processingStatus" class="text-gray-500">Preparando tudo com carinho</div>
+    <div class="progress-bar mt-6 max-w-md mx-auto">
+      <div id="progressBar" class="progress-fill" style="width: 0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="hidden max-w-7xl mx-auto px-6 py-10">
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+    <div>
+      <h2 class="text-2xl font-bold">🎯 Suas atividades</h2>
+      <p id="docTitle" class="text-sm text-gray-500 mt-1"></p>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn-soft text-sm" onclick="resetFile()">🔄 Novo texto</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="card p-4">
+      <div class="text-xs text-gray-500">⭐ Estrelas</div>
+      <div id="statStars" class="text-2xl font-bold" style="color: #f59e0b;">0</div>
+    </div>
+    <div class="card p-4">
+      <div class="text-xs text-gray-500">🎯 Atividades</div>
+      <div id="statActivities" class="text-2xl font-bold" style="color: #7c5cff;">0</div>
+    </div>
+    <div class="card p-4">
+      <div class="text-xs text-gray-500">📄 Páginas</div>
+      <div id="statPages" class="text-2xl font-bold" style="color: #22d3ee;">0</div>
+    </div>
+    <div class="card p-4">
+      <div class="text-xs text-gray-500">📝 Palavras</div>
+      <div id="statWords" class="text-2xl font-bold" style="color: #48bb78;">0</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="card p-2 mb-6 flex gap-2 overflow-x-auto">
+    <button class="tab-btn active" onclick="switchTab('comic', this)">📖 Quadrinhos</button>
+    <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 Teste</button>
+    <button class="tab-btn" onclick="switchTab('match', this)">🔗 Matching</button>
+    <button class="tab-btn" onclick="switchTab('sequence', this)">📊 Sequência</button>
+    <button class="tab-btn" onclick="switchTab('emotions', this)">😊 Emoções</button>
+    <button class="tab-btn" onclick="switchTab('social', this)">💭 História Social</button>
+    <button class="tab-btn" onclick="switchTab('flashcards', this)">🎴 Flashcards</button>
+  </div>
+
+  <div class="card p-6 md:p-8 min-h-[500px]">
+    
+    <!-- QUADRINHOS -->
+    <div id="tab-comic">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📖 Sua história em quadrinhos</div>
+          <div class="text-xs text-gray-400 mt-1">Baseada no texto que você enviou</div>
+        </div>
+        <button class="btn-soft text-sm" onclick="generateComic()">🎨 Gerar quadrinhos</button>
+      </div>
+      <div id="comicLoading" class="hidden text-center py-12">
+        <div class="loader mx-auto mb-4"></div>
+        <div class="text-gray-500">Desenhando sua história...</div>
+      </div>
+      <div id="comicContainer" class="grid md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- TESTE -->
+    <div id="tab-quiz" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎯 Teste adaptado</div>
+          <div class="text-xs text-gray-400 mt-1">Sem pressa, no seu ritmo</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateQuiz()">🎲 Novo teste</button>
+      </div>
+      <div id="quizLoading" class="hidden text-center py-12">
+        <div class="loader mx-auto mb-4"></div>
+      </div>
+      <div id="quizContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">🎯</div>
+          <div class="text-xl font-bold mb-2">Pronto para um teste divertido?</div>
+          <button class="btn-primary mt-4" onclick="generateQuiz()">🎲 Começar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCHING -->
+    <div id="tab-match" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🔗 Jogo de Matching</div>
+          <div class="text-xs text-gray-400 mt-1">Encontre os pares iguais</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateMatch()">🎲 Novo jogo</button>
+      </div>
+      <div id="matchContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">🔗</div>
+          <div class="text-xl font-bold mb-2">Vamos parear?</div>
+          <button class="btn-primary mt-4" onclick="generateMatch()">🎲 Começar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEQUÊNCIA -->
+    <div id="tab-sequence" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📊 Organize a sequência</div>
+          <div class="text-xs text-gray-400 mt-1">Coloque na ordem certa</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateSequence()">🎲 Nova sequência</button>
+      </div>
+      <div id="sequenceContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">📊</div>
+          <div class="text-xl font-bold mb-2">Vamos organizar?</div>
+          <button class="btn-primary mt-4" onclick="generateSequence()">🎲 Começar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMOÇÕES -->
+    <div id="tab-emotions" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">😊 Reconhecer emoções</div>
+          <div class="text-xs text-gray-400 mt-1">Qual emoção a pessoa está sentindo?</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateEmotions()">🎲 Novo desafio</button>
+      </div>
+      <div id="emotionsContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">😊</div>
+          <div class="text-xl font-bold mb-2">Vamos praticar emoções?</div>
+          <button class="btn-primary mt-4" onclick="generateEmotions()">🎲 Começar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTÓRIA SOCIAL -->
+    <div id="tab-social" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">💭 História Social</div>
+          <div class="text-xs text-gray-400 mt-1">Entenda situações do dia a dia</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateSocialStory()">✨ Gerar história</button>
+      </div>
+      <div id="socialLoading" class="hidden text-center py-12">
+        <div class="loader mx-auto mb-4"></div>
+      </div>
+      <div id="socialContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">💭</div>
+          <div class="text-xl font-bold mb-2">Vamos entender uma situação?</div>
+          <button class="btn-primary mt-4" onclick="generateSocialStory()">✨ Gerar história</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div id="tab-flashcards" class="hidden">
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎴 Flashcards visuais</div>
+          <div class="text-xs text-gray-400 mt-1">Aprenda com imagens e palavras</div>
+        </div>
+        <button class="btn-primary text-sm" onclick="generateFlashcards()">✨ Gerar flashcards</button>
+      </div>
+      <div id="flashcardsLoading" class="hidden text-center py-12">
+        <div class="loader mx-auto mb-4"></div>
+      </div>
+      <div id="flashcardsContainer">
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">🎴</div>
+          <div class="text-xl font-bold mb-2">Vamos aprender?</div>
+          <button class="btn-primary mt-4" onclick="generateFlashcards()">✨ Começar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 mt-10">
+  <div>AutiVerse © 2026 • Feito com 💜 para mentes incríveis</div>
+</footer>
+
+<script>
+// ====== STATE ======
+let profile = null;
+let currentText = '';
+let currentTitle = '';
+let stats = { stars: 0, activities: 0 };
+let comicPanels = [];
+let quizQuestions = [];
+let quizScore = 0;
+let quizAnswered = 0;
+let matchPairs = [];
+let matchSelected = null;
+let matchMatched = 0;
+let sequenceItems = [];
+let emotionQuestion = null;
+let flashcards = [];
+let currentFlashcard = 0;
+
+// ====== INIT ======
+console.log('🧩 AutiVerse iniciando...');
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Load profile
+function loadProfile() {
+  const saved = localStorage.getItem('autiverse_profile');
+  if (saved) {
+    try {
+      profile = JSON.parse(saved);
+      updateProfileUI();
+    } catch(e) {}
+  } else {
+    setTimeout(() => openProfileModal(), 500);
+  }
+  const savedStats = localStorage.getItem('autiverse_stats');
+  if (savedStats) {
+    try { stats = JSON.parse(savedStats); } catch(e) {}
+  }
+  updateStats();
+}
+loadProfile();
+
+// ====== PROFILE ======
+let selectedEmoji = '🦖';
+let selectedLevel = '1';
+
+function openProfileModal() {
+  document.getElementById('profileModal').classList.add('show');
+  if (profile) {
+    document.getElementById('profileNameInput').value = profile.name || '';
+    document.getElementById('interestsInput').value = profile.interests || '';
+    selectedEmoji = profile.emoji || '🦖';
+    selectedLevel = profile.level || '1';
+    updateEmojiSelection();
+    updateLevelSelection();
+  }
+}
+function closeProfileModal() {
+  document.getElementById('profileModal').classList.remove('show');
+}
+document.querySelectorAll('.emoji-option').forEach(el => {
+  el.addEventListener('click', () => {
+    selectedEmoji = el.dataset.emoji;
+    updateEmojiSelection();
+  });
+});
+function updateEmojiSelection() {
+  document.querySelectorAll('.emoji-option').forEach(el => {
+    el.style.background = el.dataset.emoji === selectedEmoji ? '#f7f5ff' : '';
+    el.style.border = el.dataset.emoji === selectedEmoji ? '2px solid #7c5cff' : '2px solid transparent';
+  });
+}
+document.querySelectorAll('.level-option').forEach(el => {
+  el.addEventListener('click', () => {
+    selectedLevel = el.dataset.level;
+    updateLevelSelection();
+  });
+});
+function updateLevelSelection() {
+  document.querySelectorAll('.level-option').forEach(el => {
+    if (el.dataset.level === selectedLevel) {
+      el.style.borderColor = '#7c5cff';
+      el.style.background = '#f7f5ff';
+    } else {
+      el.style.borderColor = '#e2e8f0';
+      el.style.background = '';
+    }
+  });
+}
+function saveProfile() {
+  const name = document.getElementById('profileNameInput').value.trim();
+  const interests = document.getElementById('interestsInput').value.trim();
+  if (!name) { showToast('Digite seu nome!', 'error'); return; }
+  profile = { name, emoji: selectedEmoji, level: selectedLevel, interests };
+  localStorage.setItem('autiverse_profile', JSON.stringify(profile));
+  updateProfileUI();
+  closeProfileModal();
+  showToast(`Olá, ${name}! ${selectedEmoji}`, 'success');
+}
+function updateProfileUI() {
+  if (!profile) return;
+  document.getElementById('profileAvatar').textContent = profile.emoji || '👤';
+  document.getElementById('profileName').textContent = `Olá, ${profile.name}!`;
+  document.getElementById('profileName').classList.remove('hidden');
+}
+function updateStats() {
+  document.getElementById('statStars').textContent = stats.stars;
+  document.getElementById('statActivities').textContent = stats.activities;
+}
+function addStar(count = 1) {
+  stats.stars += count;
+  localStorage.setItem('autiverse_stats', JSON.stringify(stats));
+  updateStats();
+}
+function addActivity() {
+  stats.activities += 1;
+  localStorage.setItem('autiverse_stats', JSON.stringify(stats));
+  updateStats();
+}
+
+// ====== TOAST ======
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = {success:'✓',error:'✕',info:'ℹ'}[type]||'ℹ';
+  document.getElementById('toastMsg').textContent = msg;
+  toast.className = `toast show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ====== TEXT MODAL ======
+function openTextModal() {
+  if (!profile) { openProfileModal(); return; }
+  document.getElementById('textModal').classList.add('show');
+}
+function closeTextModal() {
+  document.getElementById('textModal').classList.remove('show');
+}
+function loadTextExample() {
+  document.getElementById('textTitle').value = 'Os Dinossauros';
+  document.getElementById('textInput').value = `Os dinossauros foram animais que viveram na Terra há milhões de anos. Eles eram répteis e existiram durante a era chamada Mesozoica.
+
+Existiam dinossauros de muitos tamanhos. Alguns eram gigantes, como o Braquiossauro, que podia ter até 25 metros de comprimento. Outros eram bem pequenos, como o Compsognato, que tinha o tamanho de uma galinha.
+
+Os dinossauros comiam coisas diferentes. Alguns eram herbívoros, ou seja, comiam apenas plantas. Outros eram carnívoros e comiam carne. O T-Rex, por exemplo, era um grande carnívoro.
+
+Os cientistas descobrem coisas sobre os dinossauros estudando os fósseis. Fósseis são restos de animais e plantas que ficaram preservados nas rochas por muito tempo.
+
+Há cerca de 65 milhões de anos, os dinossauros foram extintos. Os cientistas acreditam que um grande meteoro caiu na Terra e causou essa extinção.
+
+Hoje em dia, as aves são consideradas descendentes dos dinossauros. Quando você vê um passarinho, está vendo um parente distante dos dinossauros!`;
+}
+function processText() {
+  const text = document.getElementById('textInput').value.trim();
+  const title = document.getElementById('textTitle').value.trim() || 'Minha atividade';
+  if (text.length < 50) { showToast('Texto muito curto!', 'error'); return; }
+  closeTextModal();
+  document.getElementById('fileName').textContent = title;
+  document.getElementById('fileSize').textContent = `${text.split(/\s+/).length} palavras`;
+  document.getElementById('fileInfo').classList.remove('hidden');
+  document.getElementById('heroSection').classList.add('hidden');
+  analyzeText(text, title);
+}
+
+// ====== FILE HANDLING ======
+document.getElementById('fileInput').addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!profile) { openProfileModal(); e.target.value = ''; return; }
+  if (file.size > 20 * 1024 * 1024) { showToast('Arquivo muito grande', 'error'); return; }
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+  document.getElementById('fileInfo').classList.remove('hidden');
+  document.getElementById('heroSection').classList.add('hidden');
+  await processPDF(file);
+});
+
+async function processPDF(file) {
+  document.getElementById('processing').classList.remove('hidden');
+  document.getElementById('processingStatus').textContent = 'Lendo seu arquivo...';
+  setProgress(10);
+  try {
+    const ab = await file.arrayBuffer();
+    setProgress(30);
+    document.getElementById('processingStatus').textContent = 'Extraindo texto...';
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(ab) }).promise;
+    let fullText = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      fullText += content.items.map(item => item.str).join(' ') + '\n\n';
+      setProgress(30 + (i / pdf.numPages) * 50);
+    }
+    if (fullText.trim().length < 50) {
+      throw new Error('PDF sem texto. Tente colar o texto manualmente.');
+    }
+    setProgress(90);
+    document.getElementById('processingStatus').textContent = 'Criando atividades...';
+    analyzeText(fullText, file.name.replace('.pdf', ''));
+  } catch (err) {
+    console.error(err);
+    showToast('Erro: ' + err.message, 'error');
+    resetFile();
+  }
+}
+function setProgress(p) {
+  document.getElementById('progressBar').style.width = p + '%';
+}
+function loadDemo() {
+  if (!profile) { openProfileModal(); return; }
+  loadTextExample();
+  processText();
+}
+function resetFile() {
+  currentText = '';
+  currentTitle = '';
+  document.getElementById('fileInfo').classList.add('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('processing').classList.add('hidden');
+  document.getElementById('heroSection').classList.remove('hidden');
+  document.getElementById('fileInput').value = '';
+}
+
+// ====== ANALYSIS ======
+async function analyzeText(text, title) {
+  currentText = text;
+  currentTitle = title;
+  const words = text.split(/\s+/).filter(w => w.length > 0);
+  const wordCount = words.length;
+  const pages = Math.max(1, Math.ceil(wordCount / 300));
+  
+  document.getElementById('statPages').textContent = pages;
+  document.getElementById('statWords').textContent = wordCount.toLocaleString('pt-BR');
+  document.getElementById('docTitle').textContent = title;
+  
+  document.getElementById('processing').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+  showToast('✨ Tudo pronto! Escolha uma atividade', 'success');
+}
+
+// ====== AI HELPER ======
+async function callAI(prompt) {
+  try {
+    if (typeof puter === 'undefined' || !puter.ai) throw new Error('IA offline');
+    const response = await puter.ai.chat([{role:'user',content:prompt}], {model:'gpt-4o-mini'});
+    const txt = typeof response === 'string' ? response : response?.message?.content || String(response);
+    return txt;
+  } catch(e) {
+    console.error('IA error:', e);
+    return null;
+  }
+}
+function parseJSON(text) {
+  if (!text) return null;
+  try { return JSON.parse(text); } catch(e) {}
+  const mdMatch = text.match(/
