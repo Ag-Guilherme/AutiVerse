@@ -13,21 +13,11 @@
 body {
   font-family: 'Lexend', system-ui, sans-serif;
   background: linear-gradient(135deg, #fef9f3 0%, #f0f4ff 50%, #f3f0ff 100%);
-  color: #2d3748;
-  margin: 0;
-  min-height: 100vh;
+  color: #2d3748; margin: 0; min-height: 100vh;
 }
-.bg-shapes { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.bg-shapes::before, .bg-shapes::after {
-  content: ''; position: absolute; border-radius: 50%;
-  filter: blur(60px); opacity: 0.3;
-}
-.bg-shapes::before { width: 400px; height: 400px; background: #ffd6a5; top: -100px; left: -100px; }
-.bg-shapes::after { width: 500px; height: 500px; background: #caffbf; bottom: -150px; right: -150px; }
 .card {
   background: white; border-radius: 24px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-  border: 2px solid transparent; transition: all .3s;
 }
 .btn-primary {
   background: linear-gradient(135deg, #7c5cff, #22d3ee);
@@ -36,7 +26,7 @@ body {
   font-weight: 600; font-size: 16px;
   transition: all .2s; font-family: inherit;
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124,92,255,0.3); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124,92,255,0.3); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-soft {
   background: white; border: 2px solid #e2e8f0;
@@ -46,12 +36,6 @@ body {
   transition: all .2s; font-family: inherit;
 }
 .btn-soft:hover { border-color: #7c5cff; background: #f7f5ff; }
-.btn-big {
-  padding: 24px; font-size: 18px; border-radius: 20px;
-  display: flex; flex-direction: column; align-items: center;
-  gap: 8px; text-align: center;
-}
-.btn-emoji { font-size: 48px; }
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
@@ -69,7 +53,6 @@ body {
   background: #f7fafc; border: 2px solid #e2e8f0;
   border-radius: 14px; color: #2d3748;
   font-family: inherit; font-size: 16px; outline: none;
-  transition: all .2s;
 }
 .input-field:focus, .textarea-field:focus { border-color: #7c5cff; background: white; }
 .textarea-field { resize: vertical; min-height: 180px; line-height: 1.6; }
@@ -94,13 +77,12 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .tab-btn {
-  padding: 12px 20px; border-radius: 14px;
-  font-weight: 600; font-size: 15px;
+  padding: 12px 18px; border-radius: 14px;
+  font-weight: 600; font-size: 14px;
   color: #718096; cursor: pointer;
   border: 2px solid transparent;
   background: white; transition: all .2s;
   white-space: nowrap; font-family: inherit;
-  display: flex; align-items: center; gap: 8px;
 }
 .tab-btn:hover { color: #7c5cff; }
 .tab-btn.active { color: #7c5cff; background: #f7f5ff; border-color: #7c5cff; }
@@ -108,44 +90,42 @@ body {
   display: inline-block; padding: 2px 6px;
   font-size: 9px; background: linear-gradient(90deg, #7c5cff, #22d3ee);
   color: white; border-radius: 4px; font-weight: 700;
+  margin-left: 4px; vertical-align: middle;
 }
 .hidden { display: none !important; }
 .comic-panel {
   background: white; border: 3px solid #2d3748;
   border-radius: 12px; padding: 16px;
-  position: relative; min-height: 200px;
-  display: flex; flex-direction: column;
+  min-height: 180px; display: flex; flex-direction: column;
 }
 .speech-bubble {
   background: white; border: 2px solid #2d3748;
   border-radius: 18px; padding: 10px 14px;
-  position: relative; margin: 8px 0;
   font-size: 14px; line-height: 1.4;
 }
 .character {
-  width: 80px; height: 80px; border-radius: 50%;
+  width: 70px; height: 70px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px; margin: 8px auto;
-  border: 3px solid #2d3748; flex-shrink: 0;
+  font-size: 36px; border: 3px solid #2d3748; flex-shrink: 0;
 }
 .quiz-option {
-  padding: 18px 24px; background: white;
+  padding: 16px 20px; background: white;
   border: 3px solid #e2e8f0; border-radius: 16px;
-  margin-bottom: 12px; cursor: pointer;
-  transition: all .2s; font-size: 17px;
-  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 10px; cursor: pointer;
+  transition: all .2s; font-size: 16px;
+  display: flex; align-items: center; gap: 12px;
   font-family: inherit; text-align: left; width: 100%;
 }
-.quiz-option:hover:not(.disabled) { border-color: #7c5cff; background: #f7f5ff; transform: translateX(4px); }
+.quiz-option:hover:not(.disabled) { border-color: #7c5cff; background: #f7f5ff; }
 .quiz-option.correct { background: #c6f6d5; border-color: #48bb78; }
 .quiz-option.wrong { background: #fed7d7; border-color: #f56565; }
 .quiz-option.disabled { cursor: default; opacity: 0.7; }
 .match-card {
   background: white; border: 3px solid #e2e8f0;
-  border-radius: 16px; padding: 20px;
+  border-radius: 16px; padding: 16px;
   cursor: pointer; transition: all .2s;
-  text-align: center; font-size: 32px;
-  min-height: 100px;
+  text-align: center; font-size: 28px;
+  min-height: 90px;
   display: flex; align-items: center; justify-content: center;
 }
 .match-card:hover { border-color: #7c5cff; transform: scale(1.05); }
@@ -159,49 +139,32 @@ body {
 }
 .sequence-item {
   background: white; border: 3px solid #e2e8f0;
-  border-radius: 14px; padding: 16px;
+  border-radius: 14px; padding: 14px;
   cursor: pointer; transition: all .2s;
-  text-align: center; font-size: 36px;
+  text-align: center;
 }
 .sequence-item:hover { border-color: #7c5cff; }
-.sequence-item.opacity-50 { opacity: 0.5; }
-.social-story-panel {
-  background: white; border-radius: 20px;
-  padding: 24px; margin-bottom: 16px;
-  border-left: 6px solid #7c5cff;
-}
+.sequence-item.used { opacity: 0.4; cursor: default; }
 .emotion-card {
   background: white; border: 3px solid #e2e8f0;
-  border-radius: 16px; padding: 20px;
+  border-radius: 16px; padding: 16px;
   cursor: pointer; transition: all .2s; text-align: center;
 }
 .emotion-card:hover { border-color: #7c5cff; transform: translateY(-4px); }
-.emotion-emoji { font-size: 64px; margin-bottom: 8px; }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%;
   display: inline-block; margin-right: 6px;
 }
 .status-dot.online { background: #48bb78; box-shadow: 0 0 8px #48bb78; }
 .status-dot.offline { background: #ed8936; box-shadow: 0 0 8px #ed8936; }
-.drop-zone {
-  border: 3px dashed #cbd5e0; border-radius: 20px;
-  padding: 40px; text-align: center; cursor: pointer;
-  transition: all .3s; background: rgba(255,255,255,0.5);
-}
-.drop-zone:hover, .drop-zone.drag {
-  border-color: #7c5cff; background: #f7f5ff;
-}
-.debug-box {
-  background: #1a202c; color: #68d391;
-  font-family: monospace; font-size: 11px;
-  padding: 10px; border-radius: 8px;
-  max-height: 150px; overflow-y: auto;
-  margin-top: 10px; border: 1px solid #2d3748;
+.social-story-panel {
+  background: white; border-radius: 20px;
+  padding: 20px; margin-bottom: 12px;
+  border-left: 6px solid #7c5cff;
 }
 </style>
 </head>
 <body>
-<div class="bg-shapes"></div>
 
 <!-- HEADER -->
 <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200">
@@ -209,10 +172,7 @@ body {
     <div class="flex items-center gap-3">
       <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl" style="background: linear-gradient(135deg,#7c5cff,#22d3ee);">🧩</div>
       <div>
-        <div class="font-bold text-xl flex items-center gap-2">
-          AutiVerse
-          <span class="text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 text-white">IA</span>
-        </div>
+        <div class="font-bold text-xl">AutiVerse</div>
         <div class="text-xs flex items-center">
           <span class="status-dot" id="statusDot"></span>
           <span id="aiStatus">Verificando IA...</span>
@@ -231,18 +191,18 @@ body {
   <div class="modal">
     <div class="flex justify-between items-start mb-5">
       <div>
-        <div class="text-2xl font-bold">👋 Olá! Vamos nos conhecer?</div>
+        <div class="text-2xl font-bold">👋 Vamos nos conhecer?</div>
         <div class="text-sm text-gray-500 mt-1">Personalize sua experiência</div>
       </div>
       <button onclick="closeProfileModal()" class="text-2xl text-gray-400 hover:text-gray-600 w-8 h-8">×</button>
     </div>
     <div class="space-y-4">
       <div>
-        <label class="text-sm font-semibold mb-2 block">Como você quer ser chamado?</label>
-        <input type="text" id="profileNameInput" class="input-field" placeholder="Seu nome">
+        <label class="text-sm font-semibold mb-2 block">Seu nome</label>
+        <input type="text" id="profileNameInput" class="input-field" placeholder="Como quer ser chamado?">
       </div>
       <div>
-        <label class="text-sm font-semibold mb-2 block">Qual seu emoji favorito?</label>
+        <label class="text-sm font-semibold mb-2 block">Emoji favorito</label>
         <div class="grid grid-cols-6 gap-2" id="emojiPicker">
           <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🦖">🦖</div>
           <div class="emoji-option text-3xl p-2 rounded-xl cursor-pointer hover:bg-purple-50 text-center" data-emoji="🚀">🚀</div>
@@ -264,7 +224,7 @@ body {
           <div class="level-option p-3 rounded-xl border-2 border-gray-200 cursor-pointer text-center hover:border-purple-400" data-level="1">
             <div class="text-2xl mb-1">🟢</div>
             <div class="text-sm font-semibold">Nível 1</div>
-            <div class="text-xs text-gray-500">Mais independente</div>
+            <div class="text-xs text-gray-500">Independente</div>
           </div>
           <div class="level-option p-3 rounded-xl border-2 border-gray-200 cursor-pointer text-center hover:border-purple-400" data-level="2">
             <div class="text-2xl mb-1">🟡</div>
@@ -277,10 +237,6 @@ body {
             <div class="text-xs text-gray-500">Mais suporte</div>
           </div>
         </div>
-      </div>
-      <div>
-        <label class="text-sm font-semibold mb-2 block">O que você gosta? (interesses especiais)</label>
-        <input type="text" id="interestsInput" class="input-field" placeholder="Ex: dinossauros, espaço, carros...">
       </div>
       <button class="btn-primary w-full py-4" onclick="saveProfile()">✨ Salvar e começar</button>
     </div>
@@ -300,14 +256,11 @@ body {
     <div class="space-y-3">
       <div>
         <label class="text-sm font-semibold mb-2 block">Título (opcional)</label>
-        <input type="text" id="textTitle" class="input-field" placeholder="Ex: Meu texto sobre animais">
+        <input type="text" id="textTitle" class="input-field" placeholder="Ex: Os Dinossauros">
       </div>
       <div>
-        <label class="text-sm font-semibold mb-2 block flex justify-between">
-          <span>Texto</span>
-          <span id="textCounter" class="text-xs text-gray-400">0 caracteres</span>
-        </label>
-        <textarea id="textInput" class="textarea-field" placeholder="Cole o texto aqui..." oninput="updateTextCounter()"></textarea>
+        <label class="text-sm font-semibold mb-2 block">Texto</label>
+        <textarea id="textInput" class="textarea-field" placeholder="Cole o texto aqui..."></textarea>
       </div>
       <button class="btn-primary w-full py-4" onclick="processText()">✨ Transformar em atividades</button>
       <button class="text-sm text-gray-500 hover:text-purple-600 w-full py-2" onclick="loadTextExample()">💡 Carregar exemplo</button>
@@ -329,22 +282,22 @@ body {
       Aprender pode ser <span style="background: linear-gradient(90deg,#7c5cff,#22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent;">divertido!</span>
     </h1>
     <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-      Transforme qualquer texto em quadrinhos, testes e atividades visuais com IA gratuita.
+      Atividades adaptadas para TEA com IA gratuita
     </p>
   </div>
 
   <div class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6">
-    <button class="btn-soft btn-big" onclick="document.getElementById('fileInput').click()">
-      <div class="btn-emoji">📄</div>
-      <div class="font-semibold">Enviar PDF</div>
+    <button class="btn-soft" style="padding:24px; font-size:16px;" onclick="document.getElementById('fileInput').click()">
+      <div style="font-size:48px;">📄</div>
+      <div class="font-semibold mt-2">Enviar PDF</div>
     </button>
-    <button class="btn-soft btn-big" onclick="openTextModal()">
-      <div class="btn-emoji">📝</div>
-      <div class="font-semibold">Colar texto</div>
+    <button class="btn-soft" style="padding:24px; font-size:16px;" onclick="openTextModal()">
+      <div style="font-size:48px;">📝</div>
+      <div class="font-semibold mt-2">Colar texto</div>
     </button>
-    <button class="btn-soft btn-big" onclick="loadDemo()">
-      <div class="btn-emoji">🎮</div>
-      <div class="font-semibold">Experimentar</div>
+    <button class="btn-soft" style="padding:24px; font-size:16px;" onclick="loadDemo()">
+      <div style="font-size:48px;">🎮</div>
+      <div class="font-semibold mt-2">Experimentar</div>
     </button>
   </div>
   <input type="file" id="fileInput" accept="application/pdf,.pdf" class="hidden">
@@ -356,14 +309,8 @@ body {
         <div id="fileName" class="font-semibold truncate"></div>
         <div id="fileSize" class="text-sm text-gray-500"></div>
       </div>
-      <button class="btn-soft text-sm px-3 py-2" onclick="resetFile()">✕</button>
+      <button class="btn-soft text-sm" style="padding:8px 12px;" onclick="resetFile()">✕</button>
     </div>
-  </div>
-
-  <!-- DEBUG -->
-  <div class="max-w-2xl mx-auto mt-4">
-    <button class="text-xs text-gray-400 hover:text-gray-600" onclick="document.getElementById('debugBox').classList.toggle('hidden')">🔧 Mostrar debug</button>
-    <div id="debugBox" class="debug-box hidden"></div>
   </div>
 </section>
 
@@ -372,10 +319,7 @@ body {
   <div class="card p-10 text-center">
     <div class="loader mx-auto mb-4"></div>
     <div class="text-xl font-bold mb-2">✨ Criando suas atividades...</div>
-    <div id="processingStatus" class="text-gray-500">Preparando tudo com carinho</div>
-    <div class="progress-bar mt-6 max-w-md mx-auto">
-      <div id="progressBar" class="progress-fill" style="width: 0%"></div>
-    </div>
+    <div id="processingStatus" class="text-gray-500">Preparando tudo</div>
   </div>
 </div>
 
@@ -387,7 +331,7 @@ body {
       <p id="docTitle" class="text-sm text-gray-500 mt-1"></p>
     </div>
     <div class="flex gap-2">
-      <button class="btn-soft text-sm" onclick="resetFile()">🔄 Novo texto</button>
+      <button class="btn-soft text-sm" style="padding:10px 16px;" onclick="resetFile()">🔄 Novo</button>
     </div>
   </div>
 
@@ -411,13 +355,13 @@ body {
   </div>
 
   <div class="card p-2 mb-6 flex gap-2 overflow-x-auto">
-    <button class="tab-btn active" onclick="switchTab('comic', this)">📖 Quadrinhos <span class="ai-badge">IA</span></button>
-    <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 Teste <span class="ai-badge">IA</span></button>
-    <button class="tab-btn" onclick="switchTab('match', this)">🔗 Matching <span class="ai-badge">IA</span></button>
-    <button class="tab-btn" onclick="switchTab('sequence', this)">📊 Sequência <span class="ai-badge">IA</span></button>
+    <button class="tab-btn active" onclick="switchTab('comic', this)">📖 Quadrinhos</button>
+    <button class="tab-btn" onclick="switchTab('quiz', this)">🎯 Teste</button>
+    <button class="tab-btn" onclick="switchTab('match', this)">🔗 Matching</button>
+    <button class="tab-btn" onclick="switchTab('sequence', this)">📊 Sequência</button>
     <button class="tab-btn" onclick="switchTab('emotions', this)">😊 Emoções</button>
-    <button class="tab-btn" onclick="switchTab('social', this)">💭 História Social <span class="ai-badge">IA</span></button>
-    <button class="tab-btn" onclick="switchTab('flashcards', this)">🎴 Flashcards <span class="ai-badge">IA</span></button>
+    <button class="tab-btn" onclick="switchTab('social', this)">💭 História Social</button>
+    <button class="tab-btn" onclick="switchTab('flashcards', this)">🎴 Flashcards</button>
   </div>
 
   <div class="card p-6 md:p-8 min-h-[500px]">
@@ -425,15 +369,12 @@ body {
     <!-- QUADRINHOS -->
     <div id="tab-comic">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📖 Sua história em quadrinhos</div>
-          <div class="text-xs text-gray-400 mt-1">Baseada no texto que você enviou</div>
-        </div>
-        <button class="btn-soft text-sm" onclick="generateComic()">🎨 Gerar quadrinhos</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📖 História em quadrinhos</div>
+        <button class="btn-soft text-sm" style="padding:10px 16px;" onclick="generateComic()">🎨 Gerar quadrinhos</button>
       </div>
       <div id="comicLoading" class="hidden text-center py-12">
         <div class="loader mx-auto mb-4"></div>
-        <div class="text-gray-500">Desenhando sua história...</div>
+        <div class="text-gray-500">Desenhando...</div>
       </div>
       <div id="comicContainer" class="grid md:grid-cols-2 gap-4"></div>
     </div>
@@ -441,146 +382,82 @@ body {
     <!-- TESTE -->
     <div id="tab-quiz" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎯 Teste adaptado</div>
-          <div class="text-xs text-gray-400 mt-1">Sem pressa, no seu ritmo</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateQuiz()">🎲 Novo teste</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎯 Teste adaptado</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateQuiz()">🎲 Novo teste</button>
       </div>
       <div id="quizLoading" class="hidden text-center py-12">
         <div class="loader mx-auto mb-4"></div>
       </div>
-      <div id="quizContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">🎯</div>
-          <div class="text-xl font-bold mb-2">Pronto para um teste divertido?</div>
-          <button class="btn-primary mt-4" onclick="generateQuiz()">🎲 Começar</button>
-        </div>
-      </div>
+      <div id="quizContainer"></div>
     </div>
 
     <!-- MATCHING -->
     <div id="tab-match" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🔗 Jogo de Matching</div>
-          <div class="text-xs text-gray-400 mt-1">Encontre os pares iguais</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateMatch()">🎲 Novo jogo</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🔗 Matching</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateMatch()">🎲 Novo jogo</button>
       </div>
-      <div id="matchContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">🔗</div>
-          <div class="text-xl font-bold mb-2">Vamos parear?</div>
-          <button class="btn-primary mt-4" onclick="generateMatch()">🎲 Começar</button>
-        </div>
-      </div>
+      <div id="matchContainer"></div>
     </div>
 
     <!-- SEQUÊNCIA -->
     <div id="tab-sequence" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📊 Organize a sequência</div>
-          <div class="text-xs text-gray-400 mt-1">Coloque na ordem certa</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateSequence()">🎲 Nova sequência</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">📊 Sequência</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateSequence()">🎲 Nova sequência</button>
       </div>
-      <div id="sequenceContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">📊</div>
-          <div class="text-xl font-bold mb-2">Vamos organizar?</div>
-          <button class="btn-primary mt-4" onclick="generateSequence()">🎲 Começar</button>
-        </div>
-      </div>
+      <div id="sequenceContainer"></div>
     </div>
 
     <!-- EMOÇÕES -->
     <div id="tab-emotions" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">😊 Reconhecer emoções</div>
-          <div class="text-xs text-gray-400 mt-1">Qual emoção a pessoa está sentindo?</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateEmotions()">🎲 Novo desafio</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">😊 Emoções</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateEmotions()">🎲 Novo desafio</button>
       </div>
-      <div id="emotionsContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">😊</div>
-          <div class="text-xl font-bold mb-2">Vamos praticar emoções?</div>
-          <button class="btn-primary mt-4" onclick="generateEmotions()">🎲 Começar</button>
-        </div>
-      </div>
+      <div id="emotionsContainer"></div>
     </div>
 
     <!-- HISTÓRIA SOCIAL -->
     <div id="tab-social" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">💭 História Social</div>
-          <div class="text-xs text-gray-400 mt-1">Entenda situações do dia a dia</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateSocialStory()">✨ Gerar história</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">💭 História Social</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateSocialStory()">✨ Gerar história</button>
       </div>
       <div id="socialLoading" class="hidden text-center py-12">
         <div class="loader mx-auto mb-4"></div>
       </div>
-      <div id="socialContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">💭</div>
-          <div class="text-xl font-bold mb-2">Vamos entender uma situação?</div>
-          <button class="btn-primary mt-4" onclick="generateSocialStory()">✨ Gerar história</button>
-        </div>
-      </div>
+      <div id="socialContainer"></div>
     </div>
 
     <!-- FLASHCARDS -->
     <div id="tab-flashcards" class="hidden">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-        <div>
-          <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎴 Flashcards visuais</div>
-          <div class="text-xs text-gray-400 mt-1">Aprenda com imagens e palavras</div>
-        </div>
-        <button class="btn-primary text-sm" onclick="generateFlashcards()">✨ Gerar flashcards</button>
+        <div class="text-sm text-gray-500 uppercase tracking-wider font-semibold">🎴 Flashcards</div>
+        <button class="btn-primary text-sm" style="padding:10px 16px;" onclick="generateFlashcards()">✨ Gerar flashcards</button>
       </div>
       <div id="flashcardsLoading" class="hidden text-center py-12">
         <div class="loader mx-auto mb-4"></div>
       </div>
-      <div id="flashcardsContainer">
-        <div class="text-center py-12">
-          <div class="text-6xl mb-4">🎴</div>
-          <div class="text-xl font-bold mb-2">Vamos aprender?</div>
-          <button class="btn-primary mt-4" onclick="generateFlashcards()">✨ Começar</button>
-        </div>
-      </div>
+      <div id="flashcardsContainer"></div>
     </div>
 
   </div>
 </section>
 
 <footer class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 mt-10">
-  <div>AutiVerse © 2026 • IA gratuita via Puter.js • Feito com 💜 para mentes incríveis</div>
+  <div>AutiVerse © 2026 • Feito com 💜</div>
 </footer>
 
 <script>
-// ====== DEBUG ======
-function debug(msg) {
-  console.log('[AutiVerse]', msg);
-  const box = document.getElementById('debugBox');
-  if (box) {
-    const time = new Date().toLocaleTimeString();
-    box.innerHTML += `[${time}] ${msg}\n`;
-    box.scrollTop = box.scrollHeight;
-  }
-}
-
 // ====== STATE ======
 let profile = null;
 let currentText = '';
 let currentTitle = '';
 let aiAvailable = false;
 let stats = { stars: 0, activities: 0 };
-let comicPanels = [];
+let selectedEmoji = '🦖';
+let selectedLevel = '1';
 let quizQuestions = [];
 let quizScore = 0;
 let quizAnswered = 0;
@@ -588,39 +465,42 @@ let matchPairs = [];
 let matchSelected = null;
 let matchMatched = 0;
 let sequenceItems = [];
+let sequenceSelected = [];
 let emotionQuestion = null;
 let flashcards = [];
 let currentFlashcard = 0;
-let selectedEmoji = '🦖';
-let selectedLevel = '1';
+let comicPanels = [];
 
 // ====== INIT ======
-debug('🚀 AutiVerse iniciando...');
-debug('PDF.js: ' + (pdfjsLib?.version || 'não carregado'));
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+console.log('🚀 AutiVerse iniciando...');
+try {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+} catch(e) { console.error('Erro PDF.js:', e); }
 
 // Check AI
 async function checkAI() {
   const status = document.getElementById('aiStatus');
   const dot = document.getElementById('statusDot');
-  debug('Verificando IA...');
   try {
     if (typeof puter !== 'undefined' && puter.ai) {
-      await puter.ai.chat([{role:'user',content:'oi'}], {model:'gpt-4o-mini'});
+      const test = await Promise.race([
+        puter.ai.chat([{role:'user',content:'oi'}], {model:'gpt-4o-mini'}),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000))
+      ]);
       aiAvailable = true;
-      status.textContent = 'IA Online (GPT-4o-mini)';
+      status.textContent = 'IA Online';
       status.style.color = '#48bb78';
       dot.className = 'status-dot online';
-      debug('✓ IA disponível');
+      console.log('✓ IA disponível');
     } else {
       throw new Error('Puter não carregou');
     }
   } catch(err) {
     aiAvailable = false;
-    status.textContent = 'Modo Local (IA offline)';
+    status.textContent = 'Modo Local';
     status.style.color = '#ed8936';
     dot.className = 'status-dot offline';
-    debug('⚠ IA offline: ' + err.message);
+    console.warn('⚠ IA offline:', err.message);
   }
 }
 checkAI();
@@ -632,8 +512,7 @@ function loadProfile() {
     try {
       profile = JSON.parse(saved);
       updateProfileUI();
-      debug('✓ Perfil carregado: ' + profile.name);
-    } catch(e) { debug('Erro ao carregar perfil'); }
+    } catch(e) {}
   } else {
     setTimeout(() => openProfileModal(), 800);
   }
@@ -650,7 +529,6 @@ function openProfileModal() {
   document.getElementById('profileModal').classList.add('show');
   if (profile) {
     document.getElementById('profileNameInput').value = profile.name || '';
-    document.getElementById('interestsInput').value = profile.interests || '';
     selectedEmoji = profile.emoji || '🦖';
     selectedLevel = profile.level || '1';
     updateEmojiSelection();
@@ -696,14 +574,12 @@ function updateLevelSelection() {
 }
 function saveProfile() {
   const name = document.getElementById('profileNameInput').value.trim();
-  const interests = document.getElementById('interestsInput').value.trim();
   if (!name) { showToast('Digite seu nome!', 'error'); return; }
-  profile = { name, emoji: selectedEmoji, level: selectedLevel, interests };
+  profile = { name, emoji: selectedEmoji, level: selectedLevel };
   localStorage.setItem('autiverse_profile', JSON.stringify(profile));
   updateProfileUI();
   closeProfileModal();
   showToast(`Olá, ${name}! ${selectedEmoji}`, 'success');
-  debug('✓ Perfil salvo: ' + name);
 }
 function updateProfileUI() {
   if (!profile) return;
@@ -735,7 +611,6 @@ function showToast(msg, type = 'info') {
   toast.className = `toast show ${type}`;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
-  debug('Toast [' + type + ']: ' + msg);
 }
 
 // ====== TEXT MODAL ======
@@ -745,10 +620,6 @@ function openTextModal() {
 }
 function closeTextModal() {
   document.getElementById('textModal').classList.remove('show');
-}
-function updateTextCounter() {
-  const t = document.getElementById('textInput').value;
-  document.getElementById('textCounter').textContent = `${t.length} caracteres • ${t.trim() ? t.trim().split(/\s+/).length : 0} palavras`;
 }
 function loadTextExample() {
   document.getElementById('textTitle').value = 'Os Dinossauros';
@@ -763,46 +634,43 @@ Os cientistas descobrem coisas sobre os dinossauros estudando os fósseis. Fóss
 Há cerca de 65 milhões de anos, os dinossauros foram extintos. Os cientistas acreditam que um grande meteoro caiu na Terra e causou essa extinção.
 
 Hoje em dia, as aves são consideradas descendentes dos dinossauros. Quando você vê um passarinho, está vendo um parente distante dos dinossauros!`;
-  updateTextCounter();
 }
 function processText() {
-  const text = document.getElementById('textInput').value.trim();
-  const title = document.getElementById('textTitle').value.trim() || 'Minha atividade';
-  if (text.length < 50) { showToast('Texto muito curto! Mínimo 50 caracteres.', 'error'); return; }
-  closeTextModal();
-  document.getElementById('fileName').textContent = title;
-  document.getElementById('fileSize').textContent = `${text.split(/\s+/).length} palavras`;
-  document.getElementById('fileInfo').classList.remove('hidden');
-  document.getElementById('heroSection').classList.add('hidden');
-  debug('Processando texto: ' + title);
-  analyzeText(text, title);
+  try {
+    const text = document.getElementById('textInput').value.trim();
+    const title = document.getElementById('textTitle').value.trim() || 'Minha atividade';
+    if (text.length < 50) { showToast('Texto muito curto! Mínimo 50 caracteres.', 'error'); return; }
+    closeTextModal();
+    document.getElementById('fileName').textContent = title;
+    document.getElementById('fileSize').textContent = `${text.split(/\s+/).length} palavras`;
+    document.getElementById('fileInfo').classList.remove('hidden');
+    document.getElementById('heroSection').classList.add('hidden');
+    analyzeText(text, title);
+  } catch(e) {
+    console.error(e);
+    showToast('Erro: ' + e.message, 'error');
+  }
 }
 
 // ====== FILE HANDLING ======
-debug('Configurando handlers de arquivo...');
-
 document.getElementById('fileInput').addEventListener('change', function(e) {
-  debug('📎 Evento change disparado');
-  const file = e.target.files[0];
-  if (!file) { debug('⚠ Nenhum arquivo'); return; }
-  debug('📄 Arquivo: ' + file.name + ' | Tipo: ' + file.type + ' | Tamanho: ' + file.size);
-  
-  if (!profile) { showToast('Faça seu perfil primeiro!', 'info'); openProfileModal(); e.target.value = ''; return; }
-  if (file.size > 20 * 1024 * 1024) { showToast('Arquivo muito grande (máx 20MB)', 'error'); e.target.value = ''; return; }
-  
-  const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-  if (!isPDF) { showToast('Selecione um arquivo PDF', 'error'); e.target.value = ''; return; }
-  
-  document.getElementById('fileName').textContent = file.name;
-  document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
-  document.getElementById('fileInfo').classList.remove('hidden');
-  document.getElementById('heroSection').classList.add('hidden');
-  processPDF(file);
+  try {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!profile) { showToast('Faça seu perfil primeiro!', 'info'); openProfileModal(); e.target.value = ''; return; }
+    if (file.size > 20 * 1024 * 1024) { showToast('Arquivo muito grande (máx 20MB)', 'error'); e.target.value = ''; return; }
+    const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPDF) { showToast('Selecione um PDF', 'error'); e.target.value = ''; return; }
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+    document.getElementById('fileInfo').classList.remove('hidden');
+    document.getElementById('heroSection').classList.add('hidden');
+    processPDF(file);
+  } catch(e) {
+    console.error(e);
+    showToast('Erro: ' + e.message, 'error');
+  }
 });
-
-// Drop zone
-const dropZone = document.getElementById('fileInput').parentElement.previousElementSibling?.previousElementSibling;
-// Usando o botão de enviar PDF - ele já chama fileInput.click()
 
 function resetFile() {
   currentText = '';
@@ -821,90 +689,60 @@ function loadDemo() {
   processText();
 }
 
-// ====== PROCESS PDF ======
 async function processPDF(file) {
-  debug('🚀 Iniciando processPDF...');
   document.getElementById('processing').classList.remove('hidden');
-  document.getElementById('processingStatus').textContent = 'Lendo seu arquivo...';
-  setProgress(10);
-  
+  document.getElementById('processingStatus').textContent = 'Lendo arquivo...';
   try {
-    debug('Passo 1: Lendo arquivo...');
     const arrayBuffer = await file.arrayBuffer();
-    debug('✓ Arquivo lido: ' + arrayBuffer.byteLength + ' bytes');
-    setProgress(30);
-    
-    debug('Passo 2: Carregando PDF...');
     document.getElementById('processingStatus').textContent = 'Carregando PDF...';
     const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-    debug('✓ PDF carregado: ' + pdf.numPages + ' páginas');
-    setProgress(50);
-    
-    debug('Passo 3: Extraindo texto...');
-    document.getElementById('processingStatus').textContent = 'Extraindo texto...';
     let fullText = '';
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       fullText += content.items.map(item => item.str).join(' ') + '\n\n';
-      setProgress(50 + (i / pdf.numPages) * 30);
       document.getElementById('processingStatus').textContent = `Página ${i}/${pdf.numPages}`;
     }
-    
-    debug('✓ Texto extraído: ' + fullText.length + ' caracteres');
-    
     if (fullText.trim().length < 50) {
-      throw new Error('PDF sem texto extraível. Tente "Colar texto".');
+      throw new Error('PDF sem texto. Tente "Colar texto".');
     }
-    
-    setProgress(90);
-    document.getElementById('processingStatus').textContent = 'Criando atividades...';
     analyzeText(fullText, file.name.replace('.pdf', ''));
   } catch (err) {
-    debug('❌ Erro: ' + err.message);
     console.error(err);
     showToast('Erro: ' + err.message, 'error');
     resetFile();
   }
 }
 
-function setProgress(p) {
-  document.getElementById('progressBar').style.width = p + '%';
-}
-
-// ====== ANALYSIS ======
-async function analyzeText(text, title) {
+function analyzeText(text, title) {
   currentText = text;
   currentTitle = title;
   const words = text.split(/\s+/).filter(w => w.length > 0);
   const wordCount = words.length;
   const pages = Math.max(1, Math.ceil(wordCount / 300));
-  
   document.getElementById('statPages').textContent = pages;
   document.getElementById('statWords').textContent = wordCount.toLocaleString('pt-BR');
   document.getElementById('docTitle').textContent = title;
-  
   document.getElementById('processing').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
-  showToast('✨ Tudo pronto! Escolha uma atividade', 'success');
-  debug('✓ Análise concluída');
+  // Iniciar primeira atividade automaticamente
+  generateComic();
+  showToast('✨ Tudo pronto!', 'success');
 }
 
 // ====== AI HELPER ======
 async function callAI(prompt) {
-  if (!aiAvailable) {
-    debug('⚠ IA offline, usando fallback');
-    return null;
-  }
+  if (!aiAvailable) return null;
   try {
-    debug('Chamando IA...');
-    const response = await puter.ai.chat([{role:'user',content:prompt}], {model:'gpt-4o-mini'});
+    const response = await Promise.race([
+      puter.ai.chat([{role:'user',content:prompt}], {model:'gpt-4o-mini'}),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000))
+    ]);
     const txt = typeof response === 'string' ? response : response?.message?.content || String(response);
-    debug('✓ Resposta IA recebida');
     return txt;
   } catch(e) {
-    debug('❌ Erro IA: ' + e.message);
+    console.error('Erro IA:', e);
     return null;
   }
 }
